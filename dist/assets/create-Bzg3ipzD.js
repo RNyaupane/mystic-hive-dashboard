@@ -1,0 +1,1 @@
+import{j as r}from"./index-DyeRod5t.js";import{P as t}from"./product-add-new-5dLd1ydy.js";import"./page-breadcrumb-CyLkbc8I.js";const s=()=>r.jsx(r.Fragment,{children:r.jsx(t,{})});export{s as default};

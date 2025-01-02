@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import { authService } from "../../api-service/auth-action/authActions";
+import { authService } from "../actions/authActions";
 
 const initialState = {
   user: [],

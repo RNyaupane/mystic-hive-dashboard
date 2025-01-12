@@ -3,3 +3,32 @@
     align-items: center;
     display: flex;
 }
+
+/* styles.css */
+.custom-datatable {
+    font-size: 12px;
+    /* Adjust the font size as needed */
+}
+
+.custom-datatable .dataTables_wrapper .dataTables_filter input {
+    font-size: 12px;
+    /* Adjust the search box font size */
+}
+
+.custom-datatable .dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-size: 12px;
+    /* Adjust the pagination font size */
+}
+
+.table.dataTable th.dt-type-numeric,
+.table.dataTable td.dt-type-numeric {
+    text-align: left !important;
+}
+
+.spinner-container {
+    min-height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

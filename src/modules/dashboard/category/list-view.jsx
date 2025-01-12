@@ -1,42 +1,39 @@
-import PageBreadcrumb from "../../../../components/page-breadcrumb";
+import PageBreadcrumb from "../../../components/page-breadcrumb";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net";
 import "datatables.net-dt/css/dataTables.dataTables.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getProducts } from "../../../../redux/reducers/productSlice";
-import Spinner from "../../../../components/spinner";
+import { getCategories } from "../../../redux/reducers/categorySlice";
+import Spinner from "../../../components/spinner";
 import { Link } from "react-router-dom";
 
-const ProductListView = () => {
+const CategoryListView = () => {
   const dispatch = useDispatch();
-  const { products, isLoading } = useSelector((state) => state.products);
+  const { categories, isLoading } = useSelector((state) => state.categories);
 
-  // Initialize DataTable
   DataTable.use(DT);
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getCategories());
   }, [dispatch]);
 
   const columns = [
+    { title: "S.N" },
     { title: "Name" },
-    { title: "Category" },
-    { title: "Inventory" },
-    { title: "Unit Price ($)" },
+    { title: "Description" },
     { title: "Created At" },
   ];
 
-  const data = products.map((product) => [
-    product.name,
-    product.category.name,
-    product.inventory,
-    product.unit_price,
-    new Date(product.created_at).toLocaleDateString(),
+  const data = categories.map((cat, index) => [
+    index + 1,
+    cat.name,
+    cat.name,
+    new Date(cat.created_at).toLocaleDateString(),
   ]);
 
   return (
     <div className="page-content">
-      <PageBreadcrumb title="Home" subtitle="Products" />
+      <PageBreadcrumb title="Home" subtitle="Category" />
 
       <div className="row">
         <div className="col-md-12 grid-margin stretch-card">
@@ -45,7 +42,7 @@ const ProductListView = () => {
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h6 className="card-title mb-0">Category List</h6>
                 <Link
-                  to="/produsts/new"
+                  to="/category/new"
                   className="btn btn-dark btn-sm"
                   type="button"
                 >
@@ -62,7 +59,7 @@ const ProductListView = () => {
                     paging={true}
                     searching={true}
                     info={true}
-                    className="table custom-datatable" // Apply custom class here
+                    className="table custom-datatable"
                     id="dataTableExample"
                     language={{
                       search: "Search",
@@ -79,4 +76,4 @@ const ProductListView = () => {
   );
 };
 
-export default ProductListView;
+export default CategoryListView;

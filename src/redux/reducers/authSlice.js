@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { authService } from "../actions/authActions";
 
 const initialState = {
-  user: [],
+  user: {},
   isError: false,
   isAuthenticated: false,
   isSuccess: false,
@@ -24,46 +24,54 @@ export const loginUser = createAsyncThunk(
 );
 
 //Reset State
-export const logoutUser = createAction("Reset_all");
+export const logoutUser = createAction("logout");
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.isSuccess = false;
+      state.statusCode = 0;
+      state.isError = false;
+      state.user = {};
+      state.token = "";
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.isAuthenticated = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       //Login User
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
-        state.user = [];
+        state.user = {};
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.isAuthenticated = true;
-        state.user = action?.payload?.user;
-        state.token = action?.payload?.jwt;
-        try {
-          localStorage.setItem("user-token", action.payload.jwt);
-        } catch (error) {
-          console.error("Error storing token in local storage:", error);
-        }
+        state.user = action?.payload?.data?.user;
+        state.accessToken = action?.payload?.data?.access;
+        state.refreshToken = action?.payload?.data?.refresh;
       })
       .addCase(loginUser.rejected, (state) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;
-        state.user = [];
+        state.user = {};
       })
 
-      //Reset State
       .addCase(logoutUser, (state) => {
         state.isSuccess = false;
         state.statusCode = 0;
         state.isError = false;
-        state.user = [];
+        state.user = {};
         state.token = "";
+        state.accessToken = null;
+        state.refreshToken = null;
         state.isAuthenticated = false;
       });
   },

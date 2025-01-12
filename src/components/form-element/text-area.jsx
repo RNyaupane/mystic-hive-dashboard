@@ -1,6 +1,13 @@
 import { Controller } from "react-hook-form";
 
-const CustomTextArea = ({ name, label, control, rules, ...rest }) => {
+const CustomTextArea = ({
+  name,
+  label,
+  control,
+  rules,
+  placeholder,
+  ...rest
+}) => {
   return (
     <div className="form-group">
       <label htmlFor={name} className="form-label">
@@ -13,13 +20,12 @@ const CustomTextArea = ({ name, label, control, rules, ...rest }) => {
         render={({ field, fieldState }) => (
           <>
             <textarea
-              maxLength="100"
               rows="8"
               id={name}
               className={`form-control ${fieldState.error ? "is-invalid" : ""}`}
               {...field}
               {...rest}
-              placeholder="Enter Product Description..."
+              placeholder={placeholder}
             ></textarea>
 
             {fieldState.error && (

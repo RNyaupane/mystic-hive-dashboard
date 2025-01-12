@@ -1,0 +1,51 @@
+.avatar_button {
+    text-align: center;
+    overflow: visible;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+
+}
+
+.avatar_text {
+    align-items: center;
+    color: #000;
+    display: flex;
+    background-color: #c7c7c7;
+    font-size: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    height: 30px;
+    width: 30px;
+    justify-content: center;
+    padding: 0.4rem;
+}
+
+.avatar_button:focus {
+    outline: .1em solid #141B38;
+}
+
+.avatar_button_large {
+    text-align: center;
+    overflow: visible;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+
+}
+
+.avatar_text_large {
+    align-items: center;
+    color: #000;
+    height: 70px;
+    width: 70px;
+    display: flex;
+    background-color: #c7c7c7;
+    font-size: 2rem;
+    border-radius: 50%;
+    vertical-align: middle;
+    justify-content: center;
+    padding: 0.4rem;
+}

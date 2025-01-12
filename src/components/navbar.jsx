@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "./theme-toggle";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/reducers/authSlice";
+import classes from "./navbar.module.css";
 const Navbar = () => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(logoutUser());
+  };
   return (
     <nav className="navbar">
       <div className="navbar-content">
         <div className="logo-mini-wrapper">
           <img
-            src="/assets/images/logo-mini-light.png"
+            src="/assets/images/logo-mini-dark.png"
             className="logo-mini logo-mini-light"
             alt="logo"
           />
@@ -130,11 +137,24 @@ const Navbar = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <img
+              {/* <img
                 className="w-30px h-30px ms-1 rounded-circle"
                 src="/assets/images/faces/face1.jpg"
                 alt="profile"
-              />
+              /> */}
+              <button
+                className={classes.avatar_button}
+                id="UserAvatarText"
+                type="button"
+                aria-label="Ducrot, Jean"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span className={classes.avatar_text}>
+                  {user?.first_name?.charAt(0).toUpperCase() || "A"}
+                  {user?.last_name?.charAt(0).toUpperCase()}
+                </span>
+              </button>
             </a>
             <div
               className="dropdown-menu p-0"
@@ -142,17 +162,30 @@ const Navbar = () => {
             >
               <div className="d-flex flex-column align-items-center border-bottom px-5 py-3">
                 <div className="mb-3">
-                  <img
+                  {/* <img
                     className="w-80px h-80px rounded-circle"
                     src="/assets/images/faces/face1.jpg"
                     alt=""
-                  />
+                  /> */}
+                  <button
+                    className={classes.avatar_button_large}
+                    id="UserAvatarText"
+                    type="button"
+                    aria-label="Ducrot, Jean"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <span className={classes.avatar_text_large}>
+                      {user?.first_name?.charAt(0).toUpperCase() || "A"}
+                      {user?.last_name?.charAt(0).toUpperCase()}
+                    </span>
+                  </button>
                 </div>
                 <div className="text-center">
-                  <p className="fs-16px fw-bolder">Amiah Burton</p>
-                  <p className="fs-12px text-secondary">
-                    amiahburton@gmail.com
+                  <p className="fs-16px fw-bolder">
+                    {user?.first_name} {user?.last_name}
                   </p>
+                  <p className="fs-12px text-secondary">{user?.email}</p>
                 </div>
               </div>
               <ul className="list-unstyled p-1">
@@ -173,7 +206,7 @@ const Navbar = () => {
                 </li>
 
                 <li className="dropdown-item py-2">
-                  <Link to="/login" className="text-body ms-0">
+                  <Link to="/login" className="text-body ms-0" onClick={logout}>
                     <i className="me-2 icon-md" data-feather="log-out"></i>
                     <span>Log Out</span>
                   </Link>

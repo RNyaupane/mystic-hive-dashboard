@@ -1,52 +1,44 @@
-import axios from "axios";
 import { toast } from "react-toastify";
-import base_url from "../../utils/base_url";
+import { requests } from "../restApi";
+import axios from "axios";
+import { API_BASE_URL } from "../../config/config-global";
 
-// Register Service
-const register = async (registerData) => {
-  try {
-    const response = await axios.post(
-      `${base_url}candidate/signup?`,
-      registerData
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error during register:", error);
-    throw error;
-  }
-};
-
-//   Login Service
+// Login Service
 const login = async (data) => {
   try {
-    const response = await axios.post(`${base_url}auth/local`, data);
-    if (response.status === 200) {
+    const response = await axios.post(`${API_BASE_URL}auth/login/`, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(response);
+    if (response?.data?.data?.user?.is_staff === false) {
+      toast.warning("You are not an Admin");
+      return false;
+    } else if (response?.data?.status) {
       toast.success(response?.message || "Login Successfully");
-    } else {
-      toast.error(response?.error?.message);
+      return response?.data;
     }
-    return response.data;
   } catch (error) {
-    toast.error(error?.response?.data?.error?.message);
+    toast.error(error?.response?.data?.message?.[0] || "Login failed!");
     throw error;
   }
 };
 
-//Logout Serive
+// Logout Service
 const logout = async () => {
   try {
-    const response = await axios.post(`${base_url}logout`);
+    const response = await requests.post("logout");
     if (response) {
-      return response.data;
+      toast.success("Logged out successfully!");
+      return response;
     }
   } catch (error) {
+    toast.error("Error during logout!");
     console.error("Error during logout:", error);
     throw error;
   }
 };
 
 export const authService = {
-  register,
   login,
   logout,
 };

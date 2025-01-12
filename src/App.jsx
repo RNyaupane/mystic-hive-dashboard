@@ -3,6 +3,7 @@ import "./App.css";
 import feather from "feather-icons";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./routes";
+import AppContainer from "./AppContainer";
 
 function App() {
   useEffect(() => {
@@ -13,6 +14,7 @@ function App() {
     <>
       <BrowserRouter>
         <AppRouter />
+        <AppContainer />
       </BrowserRouter>
     </>
   );

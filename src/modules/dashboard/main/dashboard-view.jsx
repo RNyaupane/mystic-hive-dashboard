@@ -223,7 +223,7 @@ const DashboardView = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-baseline mb-2">
-                <h6 className="card-title mb-0">Inbox</h6>
+                <h6 className="card-title mb-0">Recent Orders</h6>
                 <div className="dropdown mb-2">
                   <a
                     type="button"
@@ -298,7 +298,7 @@ const DashboardView = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-baseline mb-2">
-                <h6 className="card-title mb-0">Projects</h6>
+                <h6 className="card-title mb-0">New Products</h6>
                 <div className="dropdown mb-2">
                   <a
                     type="button"

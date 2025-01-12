@@ -1,51 +1,64 @@
-import PageBreadcrumb from "../../../../components/page-breadcrumb";
+import PageBreadcrumb from "../../../components/page-breadcrumb";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net";
 import "datatables.net-dt/css/dataTables.dataTables.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getProducts } from "../../../../redux/reducers/productSlice";
-import Spinner from "../../../../components/spinner";
+import Spinner from "../../../components/spinner";
 import { Link } from "react-router-dom";
+import { getOrders } from "../../../redux/reducers/orderSlice";
 
-const ProductListView = () => {
+const OrderListView = () => {
   const dispatch = useDispatch();
-  const { products, isLoading } = useSelector((state) => state.products);
-
+  const { orders, isLoading } = useSelector((state) => state.orders);
+  console.log(orders);
   // Initialize DataTable
   DataTable.use(DT);
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getOrders());
   }, [dispatch]);
 
   const columns = [
-    { title: "Name" },
-    { title: "Category" },
-    { title: "Inventory" },
-    { title: "Unit Price ($)" },
+    { title: "Order ID" },
+    { title: "User ID" },
+    { title: "Product Details" },
+    { title: "Quantity" },
+    { title: "Total Price ($)" },
+    { title: "Status" },
+    { title: "Payment Status" },
     { title: "Created At" },
   ];
 
-  const data = products.map((product) => [
-    product.name,
-    product.category.name,
-    product.inventory,
-    product.unit_price,
-    new Date(product.created_at).toLocaleDateString(),
+  const data = orders?.map((order) => [
+    order.id,
+    order.user,
+    order.items
+      .map(
+        (item) =>
+          `${item.product.name} (Unit Price: $${item.product.unit_price}, Quantity: ${item.quantity})`
+      )
+      .join("<br>"), // Combine product details into a single column
+    order.items.reduce((acc, item) => acc + item.quantity, 0), // Total quantity
+    order.items
+      .reduce((acc, item) => acc + parseFloat(item.price), 0)
+      .toFixed(2), // Total price
+    order.status,
+    order.payment_status,
+    new Date(order.created_at).toLocaleDateString(),
   ]);
 
   return (
     <div className="page-content">
-      <PageBreadcrumb title="Home" subtitle="Products" />
+      <PageBreadcrumb title="Home" subtitle="Orders" />
 
       <div className="row">
         <div className="col-md-12 grid-margin stretch-card">
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <h6 className="card-title mb-0">Category List</h6>
+                <h6 className="card-title mb-0">All Orders</h6>
                 <Link
-                  to="/produsts/new"
+                  to="/orders/new"
                   className="btn btn-dark btn-sm"
                   type="button"
                 >
@@ -62,11 +75,11 @@ const ProductListView = () => {
                     paging={true}
                     searching={true}
                     info={true}
-                    className="table custom-datatable" // Apply custom class here
+                    className="table custom-datatable"
                     id="dataTableExample"
                     language={{
                       search: "Search",
-                      searchPlaceholder: "Search products...",
+                      searchPlaceholder: "Search orders...",
                     }}
                   />
                 )}
@@ -79,4 +92,4 @@ const ProductListView = () => {
   );
 };
 
-export default ProductListView;
+export default OrderListView;

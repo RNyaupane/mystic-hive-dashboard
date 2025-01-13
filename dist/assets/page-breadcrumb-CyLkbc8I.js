@@ -1,1 +1,0 @@
-import{j as e}from"./index-DyeRod5t.js";const c=({title:r,subtitle:a})=>e.jsx("nav",{className:"page-breadcrumb",children:e.jsxs("ol",{className:"breadcrumb",children:[e.jsxs("li",{className:"breadcrumb-item",children:[e.jsx("a",{href:"#",children:r||"Home"})," /"]}),e.jsx("li",{className:"breadcrumb-item active","aria-current":"page",children:a||""})]})});export{c as P};

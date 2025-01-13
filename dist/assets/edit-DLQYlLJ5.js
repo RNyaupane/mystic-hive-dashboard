@@ -1,1 +1,0 @@
-import{j as r}from"./index-DyeRod5t.js";import{P as t}from"./product-add-new-5dLd1ydy.js";import"./page-breadcrumb-CyLkbc8I.js";const i=()=>r.jsx("div",{children:r.jsx(t,{currentProduct:null,editMode:!0})});export{i as default};

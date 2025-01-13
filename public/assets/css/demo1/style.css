@@ -23645,4 +23645,23 @@ div.tox .tox-button::before {
     margin: 0 0 0 .7em
 }
 
-/*# sourceMappingURL=style.css.map */
+.ZjGfQ,
+.kyZaYg,
+.gnPQCc {
+    color: var(--bs-body-color) !important;
+}
+
+.jnZiuq:disabled {
+    fill: lightgray !important;
+}
+
+.jnZiuq {
+    fill: var(--bs-body-color) !important;
+}
+
+
+.kyZaYg:not(:last-of-type),
+.bTBQAp {
+    border-bottom: 1px solid var(--bs-border-color) !important;
+
+}

@@ -15,6 +15,7 @@ const CategoryCreatePage = lazy(() => import("../pages/category/create.jsx"));
 const CategoryEditPage = lazy(() => import("../pages/category/edit.jsx"));
 const OrderListPage = lazy(() => import("../pages/orders/list.jsx"));
 const OrderCreatePage = lazy(() => import("../pages/orders/create.jsx"));
+const CommingSoon = lazy(() => import("../components/comming-soon.jsx"));
 
 const productsRoutes = [
   {
@@ -97,6 +98,16 @@ const AppRouter = () => {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/comming-soon",
+      element: (
+        <MainLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <CommingSoon />
+          </Suspense>
+        </MainLayout>
+      ),
     },
     {
       path: "*",

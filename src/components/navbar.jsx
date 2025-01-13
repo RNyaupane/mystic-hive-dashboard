@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
-import ThemeToggle from "./theme-toggle";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/reducers/authSlice";
 import classes from "./navbar.module.css";
+import { Icon } from "@iconify/react";
+import ThemeToggle from "./theme-toggle";
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutUser());
+  };
+  const handleSidebarToggle = (e) => {
+    e.preventDefault();
+    console.log("toggle");
+    const body = document.body;
+    body.classList.toggle("sidebar-open");
   };
   return (
     <nav className="navbar">
@@ -28,7 +35,7 @@ const Navbar = () => {
         <form className="search-form">
           <div className="input-group">
             <div className="input-group-text">
-              <i data-feather="search"></i>
+              <Icon icon={"fe:search"} />
             </div>
             <input
               type="text"
@@ -42,7 +49,7 @@ const Navbar = () => {
         <ul className="navbar-nav">
           <ThemeToggle />
 
-          {/* <li className="nav-item dropdown">
+          <li className="nav-item dropdown">
             <a
               className="nav-link dropdown-toggle"
               href="#"
@@ -52,7 +59,8 @@ const Navbar = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i data-feather="bell"></i>
+              <Icon icon={"fe:bell"} />
+
               <div className="indicator">
                 <div className="circle"></div>
               </div>
@@ -62,63 +70,17 @@ const Navbar = () => {
               aria-labelledby="notificationDropdown"
             >
               <div className="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">
-                <p>6 New Notifications</p>
+                <p>1 New Notifications</p>
                 <a className="text-secondary">Clear all</a>
               </div>
               <div className="p-1">
                 <a className="dropdown-item d-flex align-items-center py-2">
                   <div className="w-30px h-30px d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
-                    <i className="icon-sm text-white" data-feather="gift"></i>
+                    <Icon icon={"fe:gift"} className="text-white icon-sm" />
                   </div>
                   <div className="flex-grow-1 me-2">
-                    <p>New Order Recieved</p>
+                    <p>New Order Recieved From Jenish Nyaupane</p>
                     <p className="fs-12px text-secondary">30 min ago</p>
-                  </div>
-                </a>
-                <a className="dropdown-item d-flex align-items-center py-2">
-                  <div className="w-30px h-30px d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
-                    <i
-                      className="icon-sm text-white"
-                      data-feather="alert-circle"
-                    ></i>
-                  </div>
-                  <div className="flex-grow-1 me-2">
-                    <p>Server Limit Reached!</p>
-                    <p className="fs-12px text-secondary">1 hrs ago</p>
-                  </div>
-                </a>
-                <a className="dropdown-item d-flex align-items-center py-2">
-                  <div className="w-30px h-30px d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
-                    <img
-                      className="w-30px h-30px rounded-circle"
-                      src="/assets/images/faces/face6.jpg"
-                      alt="userr"
-                    />
-                  </div>
-                  <div className="flex-grow-1 me-2">
-                    <p>New customer registered</p>
-                    <p className="fs-12px text-secondary">2 sec ago</p>
-                  </div>
-                </a>
-                <a className="dropdown-item d-flex align-items-center py-2">
-                  <div className="w-30px h-30px d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
-                    <i className="icon-sm text-white" data-feather="layers"></i>
-                  </div>
-                  <div className="flex-grow-1 me-2">
-                    <p>Apps are ready for update</p>
-                    <p className="fs-12px text-secondary">5 hrs ago</p>
-                  </div>
-                </a>
-                <a className="dropdown-item d-flex align-items-center py-2">
-                  <div className="w-30px h-30px d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
-                    <i
-                      className="icon-sm text-white"
-                      data-feather="download"
-                    ></i>
-                  </div>
-                  <div className="flex-grow-1 me-2">
-                    <p>Download completed</p>
-                    <p className="fs-12px text-secondary">6 hrs ago</p>
                   </div>
                 </a>
               </div>
@@ -126,7 +88,7 @@ const Navbar = () => {
                 <a>View all</a>
               </div>
             </div>
-          </li> */}
+          </li>
           <li className="nav-item dropdown">
             <a
               className="nav-link dropdown-toggle"
@@ -194,20 +156,23 @@ const Navbar = () => {
                     href="pages/general/profile.html"
                     className="text-body ms-0"
                   >
-                    <i className="me-2 icon-md" data-feather="user"></i>
+                    <Icon icon={"fe:user"} className="me-2 icon-md" />
+
                     <span>Profile</span>
                   </a>
                 </li>
                 <li className="dropdown-item py-2">
                   <a className="text-body ms-0">
-                    <i className="me-2 icon-md" data-feather="edit"></i>
+                    <Icon icon={"fe:edit"} className="me-2 icon-md" />
+
                     <span>Edit Profile</span>
                   </a>
                 </li>
 
                 <li className="dropdown-item py-2">
                   <Link to="/login" className="text-body ms-0" onClick={logout}>
-                    <i className="me-2 icon-md" data-feather="log-out"></i>
+                    <Icon icon={"fe:logout"} className="me-2 icon-md" />
+
                     <span>Log Out</span>
                   </Link>
                 </li>
@@ -216,8 +181,8 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <a href="#" className="sidebar-toggler">
-          <i data-feather="menu"></i>
+        <a href="#" className="sidebar-toggler" onClick={handleSidebarToggle}>
+          <Icon icon={"fe:bar"} />
         </a>
       </div>
     </nav>

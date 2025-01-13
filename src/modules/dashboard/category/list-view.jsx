@@ -1,35 +1,39 @@
 import PageBreadcrumb from "../../../components/page-breadcrumb";
-import DataTable from "datatables.net-react";
-import DT from "datatables.net";
-import "datatables.net-dt/css/dataTables.dataTables.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCategories } from "../../../redux/reducers/categorySlice";
-import Spinner from "../../../components/spinner";
 import { Link } from "react-router-dom";
+import RHFDataGrid from "../../../components/data-grid";
 
 const CategoryListView = () => {
   const dispatch = useDispatch();
   const { categories, isLoading } = useSelector((state) => state.categories);
+  const [searchTerm, setSearchTerm] = useState(""); // Add state for search term
+  const [filteredCategories, setFilteredCategories] = useState(categories);
 
-  DataTable.use(DT);
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
-  const columns = [
-    { title: "S.N" },
-    { title: "Name" },
-    { title: "Description" },
-    { title: "Created At" },
-  ];
+  useEffect(() => {
+    setFilteredCategories(
+      categories.filter(
+        (category) =>
+          category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          category.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [categories, searchTerm]);
 
-  const data = categories.map((cat, index) => [
-    index + 1,
-    cat.name,
-    cat.name,
-    new Date(cat.created_at).toLocaleDateString(),
-  ]);
+  const columns = [
+    { name: "S.N", selector: (row, index) => index + 1, width: "70px" },
+    { name: "Name", selector: (row) => row.name },
+    { name: "Description", selector: (row) => row.description },
+    {
+      name: "Created At",
+      selector: (row) => new Date(row.created_at).toLocaleDateString(),
+    },
+  ];
 
   return (
     <div className="page-content">
@@ -40,34 +44,30 @@ const CategoryListView = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <h6 className="card-title mb-0">Category List</h6>
-                <Link
-                  to="/category/new"
-                  className="btn btn-dark btn-sm"
-                  type="button"
-                >
-                  Add New
-                </Link>
-              </div>
-              <div className="table-responsive products-table">
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  <DataTable
-                    data={data}
-                    columns={columns}
-                    paging={true}
-                    searching={true}
-                    info={true}
-                    className="table custom-datatable"
-                    id="dataTableExample"
-                    language={{
-                      search: "Search",
-                      searchPlaceholder: "Search products...",
-                    }}
+                <h6 className="card-title mb-0">Category&nbsp;List</h6>
+                <div className="w-100 gap-3  d-flex justify-content-end">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="form-control w-25 form-control-sm"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                )}
+                  <Link
+                    to="/category/new"
+                    className="btn btn-dark btn-sm"
+                    type="button"
+                  >
+                    Add New
+                  </Link>
+                </div>
               </div>
+              <RHFDataGrid
+                data={filteredCategories} // Pass filtered data
+                columns={columns}
+                isLoading={isLoading}
+                search
+              />
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../redux/reducers/authSlice";
 import React from "react";
+import { Icon } from "@iconify/react";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -14,10 +15,18 @@ const Sidebar = () => {
     {
       category: "Main",
       items: [
-        { label: "Dashboard", icon: "box", path: "/dashboard" },
+        { label: "Dashboard", icon: "fe:table", path: "/dashboard" },
+        {
+          label: "Users",
+          icon: "fe:users",
+          subMenu: [
+            { label: "List", path: "/comming-soon" },
+            { label: "Add new", path: "/comming-soon" },
+          ],
+        },
         {
           label: "Products",
-          icon: "mail",
+          icon: "fe:mail",
           subMenu: [
             { label: "List", path: "/products" },
             { label: "Add new", path: "/products/new" },
@@ -25,13 +34,14 @@ const Sidebar = () => {
         },
         {
           label: "Category",
-          icon: "inbox",
+          icon: "fe:layer",
           subMenu: [
             { label: "List", path: "/category" },
             { label: "Add new", path: "/category/new" },
           ],
         },
-        { label: "Orders", icon: "archive", path: "/orders" },
+        { label: "Orders", icon: "fe:add-cart", path: "/orders" },
+        { label: "Inventory", icon: "fe:credit-card", path: "/comming-soon" },
       ],
     },
     {
@@ -39,13 +49,25 @@ const Sidebar = () => {
       items: [
         {
           label: "Logout",
-          icon: "unlock",
+          icon: "fe:unlock",
           path: "/login",
           onClick: logout,
         },
       ],
     },
   ];
+
+  const handleSidebarToggle = (e) => {
+    e.preventDefault();
+    const body = document.body;
+    if (window.innerWidth > 900) {
+      body.classList.toggle("sidebar-folded");
+      body.classList.remove("sidebar-open");
+    } else {
+      body.classList.toggle("sidebar-open");
+      body.classList.remove("sidebar-folded");
+    }
+  };
 
   const NavItem = ({ item }) => {
     if (item.subMenu) {
@@ -59,9 +81,9 @@ const Sidebar = () => {
             aria-expanded="false"
             aria-controls={item.label.toLowerCase()}
           >
-            <i className="link-icon" data-feather={item.icon}></i>
+            <Icon icon={item.icon} className="link-icon" />
             <span className="link-title">{item.label}</span>
-            <i className="link-arrow" data-feather="chevron-down"></i>
+            <Icon icon="fe:arrow-down" className="link-arrow" />
           </a>
           <div
             className="collapse"
@@ -88,7 +110,7 @@ const Sidebar = () => {
           className="nav-link"
           onClick={item.onClick ? item.onClick : null}
         >
-          <i className="link-icon" data-feather={item.icon}></i>
+          <Icon icon={item.icon} className="link-icon" />
           <span className="link-title">{item.label}</span>
         </Link>
       </li>
@@ -106,7 +128,7 @@ const Sidebar = () => {
             width={60}
           />
         </Link>
-        <div className="sidebar-toggler">
+        <div className="sidebar-toggler" onClick={handleSidebarToggle}>
           <span></span>
           <span></span>
           <span></span>

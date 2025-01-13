@@ -1,38 +1,46 @@
 import PageBreadcrumb from "../../../../components/page-breadcrumb";
-import DataTable from "datatables.net-react";
-import DT from "datatables.net";
-import "datatables.net-dt/css/dataTables.dataTables.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProducts } from "../../../../redux/reducers/productSlice";
-import Spinner from "../../../../components/spinner";
 import { Link } from "react-router-dom";
+import RHFDataGrid from "../../../../components/data-grid";
 
 const ProductListView = () => {
   const dispatch = useDispatch();
   const { products, isLoading } = useSelector((state) => state.products);
+  const [searchTerm, setSearchTerm] = useState(""); // State to manage search term
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
-  // Initialize DataTable
-  DataTable.use(DT);
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
+  // Update filteredProducts when products or searchTerm changes
+  useEffect(() => {
+    setFilteredProducts(
+      products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [products, searchTerm]);
 
   const columns = [
-    { title: "Name" },
-    { title: "Category" },
-    { title: "Inventory" },
-    { title: "Unit Price ($)" },
-    { title: "Created At" },
+    {
+      name: "ID",
+      selector: (row) => row.id,
+      sortable: true,
+      width: "70px",
+    },
+    { name: "Name", selector: (row) => row?.name, sortable: true },
+    { name: "Category", selector: (row) => row?.category?.name },
+    { name: "Inventory", selector: (row) => row?.inventory },
+    { name: "Unit Price ($)", selector: (row) => row?.unit_price },
+    {
+      name: "Created At",
+      selector: (row) => new Date(row.created_at).toLocaleDateString(),
+    },
   ];
-
-  const data = products.map((product) => [
-    product.name,
-    product.category.name,
-    product.inventory,
-    product.unit_price,
-    new Date(product.created_at).toLocaleDateString(),
-  ]);
 
   return (
     <div className="page-content">
@@ -43,34 +51,31 @@ const ProductListView = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <h6 className="card-title mb-0">Category List</h6>
-                <Link
-                  to="/produsts/new"
-                  className="btn btn-dark btn-sm"
-                  type="button"
-                >
-                  Add New
-                </Link>
-              </div>
-              <div className="table-responsive products-table">
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  <DataTable
-                    data={data}
-                    columns={columns}
-                    paging={true}
-                    searching={true}
-                    info={true}
-                    className="table custom-datatable" // Apply custom class here
-                    id="dataTableExample"
-                    language={{
-                      search: "Search",
-                      searchPlaceholder: "Search products...",
-                    }}
+                <h6 className="card-title mb-0">All&nbsp;Products</h6>
+
+                <div className="w-100 gap-3  d-flex justify-content-end">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="form-control w-25 form-control-sm"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                )}
+                  <Link
+                    to="/products/new"
+                    className="btn btn-dark btn-sm"
+                    type="button"
+                  >
+                    Add New
+                  </Link>
+                </div>
               </div>
+              <RHFDataGrid
+                data={filteredProducts}
+                columns={columns}
+                isLoading={isLoading}
+                search
+              />
             </div>
           </div>
         </div>

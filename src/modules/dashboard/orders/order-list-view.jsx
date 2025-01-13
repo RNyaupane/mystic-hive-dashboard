@@ -1,51 +1,77 @@
+// OrderListView.js
 import PageBreadcrumb from "../../../components/page-breadcrumb";
-import DataTable from "datatables.net-react";
-import DT from "datatables.net";
-import "datatables.net-dt/css/dataTables.dataTables.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import Spinner from "../../../components/spinner";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getOrders } from "../../../redux/reducers/orderSlice";
+import RHFDataGrid from "../../../components/data-grid";
 
 const OrderListView = () => {
   const dispatch = useDispatch();
   const { orders, isLoading } = useSelector((state) => state.orders);
-  console.log(orders);
-  // Initialize DataTable
-  DataTable.use(DT);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredOrders, setFilteredOrders] = useState(orders);
+
   useEffect(() => {
     dispatch(getOrders());
   }, [dispatch]);
 
-  const columns = [
-    { title: "Order ID" },
-    { title: "User ID" },
-    { title: "Product Details" },
-    { title: "Quantity" },
-    { title: "Total Price ($)" },
-    { title: "Status" },
-    { title: "Payment Status" },
-    { title: "Created At" },
-  ];
+  // Update filteredOrders when orders or searchTerm changes
+  useEffect(() => {
+    setFilteredOrders(
+      orders.filter((order) => {
+        const searchInItems = order.items.some((item) =>
+          item.product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        return (
+          order.id.toString().includes(searchTerm.toLowerCase()) ||
+          order.user.toString().includes(searchTerm.toLowerCase()) ||
+          searchInItems
+        );
+      })
+    );
+  }, [orders, searchTerm]);
 
-  const data = orders?.map((order) => [
-    order.id,
-    order.user,
-    order.items
-      .map(
-        (item) =>
-          `${item.product.name} (Unit Price: $${item.product.unit_price}, Quantity: ${item.quantity})`
-      )
-      .join("<br>"), // Combine product details into a single column
-    order.items.reduce((acc, item) => acc + item.quantity, 0), // Total quantity
-    order.items
-      .reduce((acc, item) => acc + parseFloat(item.price), 0)
-      .toFixed(2), // Total price
-    order.status,
-    order.payment_status,
-    new Date(order.created_at).toLocaleDateString(),
-  ]);
+  const columns = [
+    { name: "Order ID", selector: (row) => row.id, width: "100px" },
+    { name: "User ID", selector: (row) => row.user, width: "100px" },
+    {
+      name: "Product Details",
+      selector: (row) =>
+        row.items
+          .map(
+            (item) =>
+              `${item.product.name} (Unit Price: $${item.product.unit_price}, Quantity: ${item.quantity})`
+          )
+          .join(", "),
+      width: "300px",
+    },
+    {
+      name: "Quantity",
+      selector: (row) =>
+        row.items.reduce((acc, item) => acc + item.quantity, 0),
+      width: "100px",
+    },
+    {
+      name: "Total Price ($)",
+      selector: (row) =>
+        row.items
+          .reduce((acc, item) => acc + parseFloat(item.price), 0)
+          .toFixed(2),
+      width: "120px",
+    },
+    { name: "Status", selector: (row) => row.status, width: "100px" },
+    {
+      name: "Payment Status",
+      selector: (row) => row.payment_status,
+      width: "100px",
+    },
+    {
+      name: "Created At",
+      selector: (row) => new Date(row.created_at).toLocaleDateString(),
+      width: "100px",
+    },
+  ];
 
   return (
     <div className="page-content">
@@ -56,34 +82,32 @@ const OrderListView = () => {
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-2">
-                <h6 className="card-title mb-0">All Orders</h6>
-                <Link
-                  to="/orders/new"
-                  className="btn btn-dark btn-sm"
-                  type="button"
-                >
-                  Add New
-                </Link>
-              </div>
-              <div className="table-responsive products-table">
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  <DataTable
-                    data={data}
-                    columns={columns}
-                    paging={true}
-                    searching={true}
-                    info={true}
-                    className="table custom-datatable"
-                    id="dataTableExample"
-                    language={{
-                      search: "Search",
-                      searchPlaceholder: "Search orders...",
-                    }}
+                <h6 className="card-title mb-0">All&nbsp;Orders</h6>
+                <div className="w-100 gap-3  d-flex justify-content-end">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="form-control w-25 form-control-sm"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                )}
+                  <Link
+                    to="/orders/new"
+                    className="btn btn-dark btn-sm"
+                    type="button"
+                  >
+                    Add New
+                  </Link>
+                </div>
               </div>
+
+              {/* Use ReusableDataTable component */}
+              <RHFDataGrid
+                data={filteredOrders} // Pass filtered data
+                columns={columns}
+                isLoading={isLoading}
+                search
+              />
             </div>
           </div>
         </div>

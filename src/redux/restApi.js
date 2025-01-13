@@ -70,6 +70,8 @@ axiosInstance.interceptors.response.use(
       // throw error;
       return null;
     }
+    console.log(originalRequest);
+    console.log(error);
 
     if (
       error.response?.status === 401 &&

@@ -1,0 +1,1 @@
+import{j as s}from"./index-CmA1NaPh.js";const e=()=>s.jsx("div",{className:"spinner-container",children:s.jsx("div",{className:"spinner-border",role:"status",children:s.jsx("span",{className:"visually-hidden",children:"Loading..."})})});export{e as S};

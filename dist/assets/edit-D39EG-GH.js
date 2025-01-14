@@ -1,0 +1,1 @@
+import{j as r}from"./index-CmA1NaPh.js";import{P as t}from"./product-add-new-yaU3CmbT.js";import"./text-area-Dd0ij0YE.js";import"./index.esm-CUC6EtsP.js";import"./page-breadcrumb-D3brcKhP.js";const m=()=>r.jsx("div",{children:r.jsx(t,{currentProduct:null,editMode:!0})});export{m as default};

@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 const TextInputField = ({ name, label, control, rules, ...rest }) => {
   return (
     <div className="form-group">
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className="form-label text-secondary">
         {label}
       </label>
       <Controller

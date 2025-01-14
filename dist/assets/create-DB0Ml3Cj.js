@@ -1,0 +1,1 @@
+import{j as r}from"./index-CmA1NaPh.js";import{C as t}from"./create-view-BGmrPPOp.js";import"./text-area-Dd0ij0YE.js";import"./index.esm-CUC6EtsP.js";import"./page-breadcrumb-D3brcKhP.js";const s=()=>r.jsx("div",{children:r.jsx(t,{})});export{s as default};

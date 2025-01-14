@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 const CustomSelect = ({ name, label, control, rules, option, ...rest }) => {
   return (
     <div className="form-group">
-      <label htmlFor={name} className="form-label">
+      <label htmlFor={name} className="form-label text-secondary">
         {label}
       </label>
       <Controller
